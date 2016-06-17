@@ -10,6 +10,11 @@ Optiboot is an easy to install upgrade to the Arduino bootloader within Arduino 
   * Compatible with 168 and 328 Arduinos including Lilypad, Pro, Nano
   * Believed to work with ATmega1280 ("Mega"), ATmega644 ("Sanguino"), and ATmega1284 ("Mighty")
   * Supports several additional AVR chips (ATmega88, ATmega32)
+ 
+A couple things that this fork adds:
+
+  * Supports ATmega328p on a breadboard (internal 8Mhz oscillator)
+  * Supports burning bootloader using a Raspberry Pi SPI bus
 
 Optiboot is now installed by default on the Arduino Uno. It can be installed on all older mega8, 168 or 328 based Arduinos.
 
