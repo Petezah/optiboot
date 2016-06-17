@@ -56,7 +56,7 @@ POSTISPCMD = echo
 ISPTOOL	?= linuxspi
 ISPPORT	?= /dev/spidev0.0
 ISPSPEED ?= -b19200
-PREISPCMD = gpio -g mode 22 out \
+PREISPCMD = gpio -g mode 22 out &&\
 			gpio -g write 22 0
 POSTISPCMD = gpio -g write 22 1
 
