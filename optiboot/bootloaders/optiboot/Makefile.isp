@@ -33,6 +33,10 @@
 AVRDUDE_ROOT ?= $(GCCROOT)
 AVRDUDE_CONF ?= -C$(TOOLROOT)/avr/etc/avrdude.conf
 
+# Optional commands
+PREISPCMD = echo
+POSTISPCMD = echo
+
 # These are the parameters for a usb-based STK500v2 programmer.
 # Exact type unknown.  (historical Makefile values.)
 #ISPTOOL	   = stk500v2
@@ -42,10 +46,19 @@ AVRDUDE_CONF ?= -C$(TOOLROOT)/avr/etc/avrdude.conf
 #
 # These are parameters for using an Arduino with the ArduinoISP sketch
 #  as the programmer.  On a mac, for a particular Uno as programmer.
-ISPTOOL	?= stk500v1
-ISPPORT	?= /dev/tty.usbserial-FTD61T6Q
+#ISPTOOL	?= stk500v1
+#ISPPORT	?= /dev/tty.usbserial-FTD61T6Q
+#ISPSPEED ?= -b19200
+#
+#
+# These are parameters for using a Raspberry Pi ISP bus
+#  as the programmer. 
+ISPTOOL	?= linuxspi
+ISPPORT	?= /dev/spidev0.0
 ISPSPEED ?= -b19200
-
+PREISPCMD = gpio -g mode 22 out \
+			gpio -g write 22 0
+POSTISPCMD = gpio -g write 22 1
 
 
 # Not all chips have EFUSE.
@@ -84,7 +97,9 @@ ISPFLASH =	-U flash:w:$(PROGRAM)_$(TARGET).hex -U lock:w:0x2f:m
 # unused, avrdude would get confused.
 
 isp: $(PROGRAM)_$(TARGET).hex
+	$(PREISPCMD)
 	$(AVRDUDE_ROOT)avrdude $(AVRDUDE_CONF) -c $(ISPTOOL) \
               -p $(MCU_TARGET) -P $(ISPPORT) $(ISPSPEED) \
 	$(ISPFUSES) \
 	$(ISPFLASH)
+	$(POSTISPCMD)

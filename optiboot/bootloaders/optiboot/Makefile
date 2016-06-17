@@ -500,6 +500,24 @@ atmega328_pro8_isp: LFUSE ?= FF
 atmega328_pro8_isp: EFUSE ?= 05
 atmega328_pro8_isp: isp
 
+atmega328_bb: TARGET = atmega328_bb_8MHz
+atmega328_bb: CHIP = atmega328
+atmega328_bb:
+	$(MAKE) $(CHIP) AVR_FREQ=8000000L LED_START_FLASHES=10 LED_DATA_FLASH=1 BAUD_RATE=57600
+	mv $(PROGRAM)_$(CHIP).hex $(PROGRAM)_$(TARGET).hex
+	mv $(PROGRAM)_$(CHIP).lst $(PROGRAM)_$(TARGET).lst
+
+atmega328_bb_isp: atmega328_bb
+atmega328_bb_isp: TARGET = atmega328_bb_8MHz
+atmega328_bb_isp: MCU_TARGET = atmega328p
+# 512 byte boot, SPIEN
+atmega328_bb_isp: HFUSE ?= DE
+# Internal osc (8MHz) 6KCK/14CK+65ms
+atmega328_bb_isp: LFUSE ?= E2
+# 2.7V brownout
+atmega328_bb_isp: EFUSE ?= 05
+atmega328_bb_isp: isp
+
 #
 # Include additional platforms
 include Makefile.atmel
